@@ -1,0 +1,11 @@
+{
+  "name": "near-fiddle-api",
+  "version": "0.0.1",
+  "description": "Micro-service to save/load fiddles for NEAR Studio",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT"
+}
