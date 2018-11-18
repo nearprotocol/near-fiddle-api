@@ -45,7 +45,6 @@ router.get('/api/fiddle/:name', async ctx => {
             model: models.File
         }]
     });
-    console.log("fiddle", fiddle);
     ctx.body = {
         success: true,
         message: "Success",
