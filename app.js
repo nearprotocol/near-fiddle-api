@@ -5,9 +5,12 @@ const Koa = require('koa');
 const app = new Koa();
 
 const body = require('koa-json-body')
+const cors = require('@koa/cors');
 
 // TODO: Check what limit means and set appropriate limit
 app.use(body({ limit: '10kb', fallback: true }))
+// TODO: Limit CORS to studio.nearprotocol.com
+app.use(cors());
 
 const models = require('./models');
 const Op = models.Sequelize.Op;
