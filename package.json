@@ -9,9 +9,14 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "crypto2": "^2.0.0",
     "koa": "^2.6.2",
     "koa-json-body": "^5.3.0",
+    "koa-router": "^7.4.0",
     "koa-session": "^5.10.0",
+    "pg": "^7.6.1",
+    "pg-hstore": "^2.3.2",
+    "randomstring": "^1.1.5",
     "sequelize": "^4.41.2",
     "sugar": "^2.0.4"
   }
