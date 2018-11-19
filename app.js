@@ -8,7 +8,7 @@ const body = require('koa-json-body')
 const cors = require('@koa/cors');
 
 // TODO: Check what limit means and set appropriate limit
-app.use(body({ limit: '10kb', fallback: true }))
+app.use(body({ limit: '500kb', fallback: true }))
 // TODO: Limit CORS to studio.nearprotocol.com
 app.use(cors());
 
