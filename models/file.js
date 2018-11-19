@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const File = sequelize.define('File', {
-    hash: DataTypes.STRING,
+    hash: { type: DataTypes.STRING, unique: true },
     data: DataTypes.BLOB
   }, {});
   File.associate = function(models) {
