@@ -20,5 +20,9 @@
     "randomstring": "^1.1.5",
     "sequelize": "^4.41.2",
     "sugar": "^2.0.4"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0",
+    "supertest": "^3.3.0"
   }
 }

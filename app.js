@@ -65,7 +65,11 @@ app
     .use(router.routes())
     .use(router.allowedMethods());
 
-models.sequelize.sync().then(() => {
-    app.listen(3000);
-});
-  
+if (!module.parent) {
+    models.sequelize.sync().then(() => {
+        app.listen(3000);
+    });
+} else {
+    module.exports = app;
+}
+
