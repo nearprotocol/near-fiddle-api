@@ -23,7 +23,8 @@ router.post('/api/set-fiddle', async ctx => {
     const fiddle = await models.Fiddle.create({
         name: randomstring.generate({ readable: true, length: 7 })
     });
-    await ctx.request.body.files.map(async fileInRequest => {
+    const filesInRequest = Array.isArray(ctx.request.body.files) ? ctx.request.body.files : []; 
+    await Promise.all(filesInRequest.map(async fileInRequest => {
         const [file, _] = await models.File.findOrCreate({
            where: {
                hash: await crypto2.hash.sha256(fileInRequest.data)
@@ -33,7 +34,7 @@ router.post('/api/set-fiddle', async ctx => {
            }
         });
         await fiddle.addFile(file, { through: { name: fileInRequest.name, type: fileInRequest.type } });
-    });
+    }));
     ctx.body = {
         success: true,
         message: "Branch " + fiddle.name + " pushed",
