@@ -29,14 +29,14 @@ const FILE2_UPDATED = {
 };
 
 test('Create Fiddle No Content', async () => {
-    const response = await request(app.callback()).post('/api/set-fiddle');
+    const response = await request(app.callback()).post('/api/fiddle');
     expect(response.status).toBe(200);
     expect(response.body.success).toBeTruthy();
     expect(response.body.id).toBeTruthy();
 });
 
 test('Create & View Fiddle', async () => {
-    const createResponse = await request(app.callback()).post('/api/set-fiddle')
+    const createResponse = await request(app.callback()).post('/api/fiddle')
         .send({ files: [FILE1, FILE2] });
     expect(createResponse.status).toBe(200);
 
@@ -48,7 +48,7 @@ test('Create & View Fiddle', async () => {
 });
 
 test('Create Fiddle & Add File', async () => {
-    const createResponse = await request(app.callback()).post('/api/set-fiddle')
+    const createResponse = await request(app.callback()).post('/api/fiddle')
         .send({ files: [FILE1] });
     expect(createResponse.status).toBe(200);
 
@@ -64,7 +64,7 @@ test('Create Fiddle & Add File', async () => {
 });
 
 test('Create Fiddle & Update File', async () => {
-    const createResponse = await request(app.callback()).post('/api/set-fiddle')
+    const createResponse = await request(app.callback()).post('/api/fiddle')
         .send({ files: [FILE1, FILE2] });
     expect(createResponse.status).toBe(200);
 

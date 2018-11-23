@@ -31,7 +31,7 @@ let withFiddle = async (ctx, next) => {
     await next();
 }
 
-router.post('/api/set-fiddle', async ctx => {
+router.post('/api/fiddle', async ctx => {
     const fiddle = await models.Fiddle.create({
         name: randomstring.generate({ readable: true, length: 7 })
     });
