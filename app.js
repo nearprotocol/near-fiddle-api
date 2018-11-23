@@ -42,6 +42,7 @@ router.post('/api/fiddle', async ctx => {
         message: "Branch " + fiddle.name + " pushed",
         id: fiddle.name
     };
+    ctx.status = 201;
 });
 
 router.get('/api/fiddle/:name', withFiddle, async ctx => {
@@ -62,11 +63,7 @@ router.get('/api/fiddle/:name', withFiddle, async ctx => {
 router.patch('/api/fiddle/:name', withFiddle, async ctx => {
     const filesInRequest = ctx.request.body.files;
     await ctx.fiddle.addOrUpdateFilesFromRequest(filesInRequest);
-    ctx.body = {
-        success: true,
-        message: "Success",
-        id: ctx.fiddle.name
-    };
+    ctx.status = 204;
 });
 
 app
