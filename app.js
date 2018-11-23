@@ -14,27 +14,29 @@ app.use(cors());
 
 const models = require('./models');
 const Op = models.Sequelize.Op;
-const crypto2 = require('crypto2');
 const randomstring = require('randomstring');
 const Router = require('koa-router');
 const router = new Router();
+
+let withFiddle = async (ctx, next) => {
+    ctx.fiddle = await models.Fiddle.findOne({
+        where: { name: ctx.params.name },
+        include: [{
+            model: models.File
+        }]
+    });
+    if (!ctx.fiddle) {
+        ctx.throw(404);
+    }
+    await next();
+}
 
 router.post('/api/set-fiddle', async ctx => {
     const fiddle = await models.Fiddle.create({
         name: randomstring.generate({ readable: true, length: 7 })
     });
-    const filesInRequest = Array.isArray(ctx.request.body.files) ? ctx.request.body.files : []; 
-    await Promise.all(filesInRequest.map(async fileInRequest => {
-        const [file, _] = await models.File.findOrCreate({
-           where: {
-               hash: await crypto2.hash.sha256(fileInRequest.data)
-           },
-           defaults: {
-               data: fileInRequest.data
-           }
-        });
-        await fiddle.addFile(file, { through: { name: fileInRequest.name, type: fileInRequest.type } });
-    }));
+    const filesInRequest = ctx.request.body.files; 
+    await fiddle.addOrUpdateFilesFromRequest(filesInRequest);
     ctx.body = {
         success: true,
         message: "Branch " + fiddle.name + " pushed",
@@ -42,23 +44,28 @@ router.post('/api/set-fiddle', async ctx => {
     };
 });
 
-router.get('/api/fiddle/:name', async ctx => {
-    const fiddle = await models.Fiddle.findOne({
-        where: { name: ctx.params.name },
-        include: [{
-            model: models.File
-        }]
-    });
+router.get('/api/fiddle/:name', withFiddle, async ctx => {
     ctx.body = {
         success: true,
         message: "Success",
-        id: fiddle.name,
-        files: fiddle.Files.map(file => {
+        id: ctx.fiddle.name,
+        files: ctx.fiddle.Files.map(file => {
             return {
                 name: file.FiddleFile.name,
+                type: file.FiddleFile.type,
                 data: file.getDataValue('data').toString('utf8')
             };
         })
+    };
+});
+
+router.patch('/api/fiddle/:name', withFiddle, async ctx => {
+    const filesInRequest = ctx.request.body.files;
+    await ctx.fiddle.addOrUpdateFilesFromRequest(filesInRequest);
+    ctx.body = {
+        success: true,
+        message: "Success",
+        id: ctx.fiddle.name
     };
 });
 
