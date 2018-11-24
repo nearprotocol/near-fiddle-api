@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@koa/cors": "^2.2.2",
+    "cls-hooked": "^4.2.2",
     "crypto2": "^2.0.0",
     "koa": "^2.6.2",
     "koa-json-body": "^5.3.0",
