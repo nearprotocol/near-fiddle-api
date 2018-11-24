@@ -22,8 +22,9 @@ let withFiddle = async (ctx, next) => {
     ctx.fiddle = await models.Fiddle.findOne({
         where: { name: ctx.params.name },
         include: [{
-            model: models.File
-        }]
+            model: models.File,
+        }],
+        order: [[models.File, models.FiddleFile, 'name']]
     });
     if (!ctx.fiddle) {
         ctx.throw(404);
