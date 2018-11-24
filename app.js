@@ -18,7 +18,29 @@ const randomstring = require('randomstring');
 const Router = require('koa-router');
 const router = new Router();
 
-let withFiddle = async (ctx, next) => {
+const namespace = require('cls-hooked').createNamespace('near-fiddle-api');
+models.Sequelize.useCLS(namespace);
+
+// TODO: Extract and publish as separate module as koa-sequelize-transaction is broken
+const transactionMiddleware = (ctx, next) => {
+    return new Promise((resolve, reject) => {
+        namespace.run(() => {
+            const transaction = models.sequelize.transaction().then(transaction => {
+                namespace.set('transaction', transaction);
+                next().then((result) => {
+                    transaction.commit();
+                    resolve(result);
+                }, (e) => {
+                    transaction.rollback();
+                    reject(e);
+                });
+            }, reject);
+        });
+    });
+};
+app.use(transactionMiddleware);
+
+const withFiddle = async (ctx, next) => {
     ctx.fiddle = await models.Fiddle.findOne({
         where: { name: ctx.params.name },
         include: [{
