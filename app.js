@@ -44,9 +44,12 @@ const withFiddle = async (ctx, next) => {
     ctx.fiddle = await models.Fiddle.findOne({
         where: { name: ctx.params.name },
         include: [{
-            model: models.File,
+            model: models.FiddleFile,
+            include: {
+                model: models.File
+            }
         }],
-        order: [[models.File, models.FiddleFile, 'name']]
+        order: [[models.FiddleFile, 'name']]
     });
     if (!ctx.fiddle) {
         ctx.throw(404);
@@ -73,11 +76,11 @@ router.get('/api/fiddle/:name', withFiddle, async ctx => {
         success: true,
         message: "Success",
         id: ctx.fiddle.name,
-        files: ctx.fiddle.Files.map(file => {
+        files: ctx.fiddle.FiddleFiles.map(file => {
             return {
-                name: file.FiddleFile.name,
-                type: file.FiddleFile.type,
-                data: file.getDataValue('data').toString('utf8')
+                name: file.name,
+                type: file.type,
+                data: file.File.getDataValue('data').toString('utf8')
             };
         })
     };

@@ -6,8 +6,8 @@ module.exports = (sequelize, DataTypes) => {
     name: { type: DataTypes.STRING, unique: true },
   }, {});
   Fiddle.associate = function(models) {
-    models.File.belongsToMany(Fiddle, { through: models.FiddleFile });
-    Fiddle.belongsToMany(models.File, { through: models.FiddleFile });
+    Fiddle.hasMany(models.FiddleFile);
+    models.FiddleFile.belongsTo(Fiddle);
   };
   Fiddle.prototype.addOrUpdateFileFromRequest = async function (fileInRequest) {
     const [file, _] = await sequelize.models.File.findOrCreate({
@@ -18,11 +18,18 @@ module.exports = (sequelize, DataTypes) => {
         data: fileInRequest.data
       }
     });
-    if (this.Files) {
-      const fileToReplace = this.Files.find(file => file.FiddleFile.name === fileInRequest.name);
-      await this.removeFile(fileToReplace);
+    if (this.FiddleFiles) {
+      const fileToReplace = this.FiddleFiles.find(file => file.name === fileInRequest.name);
+      if (fileToReplace) {
+        await fileToReplace.destroy();
+      }
     }
-    await this.addFile(file, { through: { name: fileInRequest.name, type: fileInRequest.type } });
+    await sequelize.models.FiddleFile.create({
+      FiddleId: this.id,
+      FileId: file.id,
+      name: fileInRequest.name,
+      type: fileInRequest.type
+    });
   };
   Fiddle.prototype.addOrUpdateFilesFromRequest = async function(filesInRequest) {
     if (Array.isArray(filesInRequest)) {

@@ -1,11 +1,13 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const FiddleFile = sequelize.define('FiddleFile', {
-    name: DataTypes.STRING,
+    FiddleId: { type: DataTypes.INTEGER, primaryKey: true },
+    FileId: { type: DataTypes.INTEGER, primaryKey: true },
+    name: { type: DataTypes.STRING, primaryKey: true },
     type: DataTypes.STRING
   }, {});
   FiddleFile.associate = function(models) {
-    // associations can be defined here
+    FiddleFile.belongsTo(models.File);
   };
   return FiddleFile;
 };

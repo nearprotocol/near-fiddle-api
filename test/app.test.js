@@ -19,7 +19,7 @@ const FILE1 = {
 const FILE2 = {
     name: 'src/file2.txt',
     type: 'text',
-    data: 'file contents 2'
+    data: 'file contents'
 };
 
 const FILE2_UPDATED = {
