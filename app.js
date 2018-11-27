@@ -44,7 +44,9 @@ app.use(transactionMiddleware);
 const session = require('koa-generic-session');
 const SequelizeStore = require('koa-generic-session-sequelize');
 app.use(session({
-  store: new SequelizeStore(models.sequelize, {})
+    store: new SequelizeStore(models.sequelize, {
+        maxAge: 90 * 24 * 60 * 60 * 1000 // 90 days in ms
+    })
 }));
 
 const createFiddle = async (ctx, next) => {
