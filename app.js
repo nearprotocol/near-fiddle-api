@@ -40,6 +40,12 @@ const transactionMiddleware = (ctx, next) => {
 };
 app.use(transactionMiddleware);
 
+const session = require('koa-generic-session');
+const SequelizeStore = require('koa-generic-session-sequelize');
+app.use(session({
+  store: new SequelizeStore(models.sequelize, {})
+}));
+
 const withFiddle = async (ctx, next) => {
     ctx.fiddle = await models.Fiddle.findOne({
         where: { name: ctx.params.name },
