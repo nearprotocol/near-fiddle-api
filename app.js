@@ -3,6 +3,7 @@ Sugar.extend();
 
 const Koa = require('koa');
 const app = new Koa();
+app.keys = [ process.env.FIDDLE_SECRET_KEY || "verysecretkey"];
 
 const body = require('koa-json-body')
 const cors = require('@koa/cors');
@@ -46,6 +47,13 @@ app.use(session({
   store: new SequelizeStore(models.sequelize, {})
 }));
 
+const createFiddle = async (ctx, next) => {
+    ctx.fiddle = await models.Fiddle.create({
+        name: randomstring.generate({ readable: true, length: 7 })
+    });
+    await next();
+}
+
 const withFiddle = async (ctx, next) => {
     ctx.fiddle = await models.Fiddle.findOne({
         where: { name: ctx.params.name },
@@ -63,21 +71,33 @@ const withFiddle = async (ctx, next) => {
     await next();
 }
 
-router.post('/api/fiddle', async ctx => {
-    const fiddle = await models.Fiddle.create({
-        name: randomstring.generate({ readable: true, length: 7 })
-    });
+const updateFiddleFiles = async (ctx, next) => {
     const filesInRequest = ctx.request.body.files; 
-    await fiddle.addOrUpdateFilesFromRequest(filesInRequest);
+    await ctx.fiddle.addOrUpdateFilesFromRequest(filesInRequest);
+    await next();
+}
+
+const grantFiddleAccess = async (ctx, next) => {
+    ctx.session.ownedFiddles = ctx.session.ownedFiddles || [];
+    ctx.session.ownedFiddles = ctx.session.ownedFiddles.concat([ctx.fiddle.name]);
+    await next();
+}
+
+const checkFiddleAccess = async (ctx, next) => {
+    ctx.fiddleEditable = ctx.session.ownedFiddles && ctx.session.ownedFiddles.find(ctx.fiddle.name);
+    await next();
+}
+
+router.post('/api/fiddle', createFiddle, updateFiddleFiles, grantFiddleAccess, async ctx => {
     ctx.body = {
         success: true,
-        message: "Branch " + fiddle.name + " pushed",
-        id: fiddle.name
+        message: "Branch " + ctx.fiddle.name + " pushed",
+        id: ctx.fiddle.name
     };
     ctx.status = 201;
 });
 
-router.get('/api/fiddle/:name', withFiddle, async ctx => {
+router.get('/api/fiddle/:name', withFiddle, checkFiddleAccess, async ctx => {
     ctx.body = {
         success: true,
         message: "Success",
@@ -92,9 +112,10 @@ router.get('/api/fiddle/:name', withFiddle, async ctx => {
     };
 });
 
-router.patch('/api/fiddle/:name', withFiddle, async ctx => {
-    const filesInRequest = ctx.request.body.files;
-    await ctx.fiddle.addOrUpdateFilesFromRequest(filesInRequest);
+router.patch('/api/fiddle/:name', withFiddle, checkFiddleAccess, updateFiddleFiles, async ctx => {
+    if (!ctx.fiddleEditable) {
+        ctx.throw(403);
+    }
     ctx.status = 204;
 });
 

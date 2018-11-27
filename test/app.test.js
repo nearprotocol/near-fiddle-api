@@ -48,15 +48,17 @@ test('Create & View Fiddle', async () => {
 });
 
 test('Create Fiddle & Add File', async () => {
-    const createResponse = await request(app.callback()).post('/api/fiddle')
+    // NOTE: request.agent creates client with cookie store
+    const agent = request.agent(app.callback());
+    const createResponse = await agent.post('/api/fiddle')
         .send({ files: [FILE1] });
     expect(createResponse.status).toBe(201);
 
-    const updateResponse = await request(app.callback()).patch('/api/fiddle/' + createResponse.body.id)
+    const updateResponse = await agent.patch('/api/fiddle/' + createResponse.body.id)
         .send({ files: [FILE2] });
     expect(updateResponse.status).toBe(204);
 
-    const response = await request(app.callback()).get('/api/fiddle/' + createResponse.body.id);
+    const response = await agent.get('/api/fiddle/' + createResponse.body.id);
     expect(response.status).toBe(200);
     expect(response.body.success).toBeTruthy();
     expect(response.body.id).toBeTruthy();
@@ -64,18 +66,31 @@ test('Create Fiddle & Add File', async () => {
 });
 
 test('Create Fiddle & Update File', async () => {
+    // NOTE: request.agent creates client with cookie store
+    const agent = request.agent(app.callback());
+    const createResponse = await agent.post('/api/fiddle')
+        .send({ files: [FILE1, FILE2] });
+    expect(createResponse.status).toBe(201);
+
+    const updateResponse = await agent.patch('/api/fiddle/' + createResponse.body.id)
+        .send({ files: [FILE2_UPDATED] });
+    expect(updateResponse.status).toBe(204);
+
+    const response = await agent.get('/api/fiddle/' + createResponse.body.id);
+    expect(response.status).toBe(200);
+    expect(response.body.success).toBeTruthy();
+    expect(response.body.id).toBeTruthy();
+    expect(response.body.files).toEqual([FILE1, FILE2_UPDATED]);
+});
+
+test('Create Fiddle & Update File Unauthorized', async () => {
     const createResponse = await request(app.callback()).post('/api/fiddle')
         .send({ files: [FILE1, FILE2] });
     expect(createResponse.status).toBe(201);
 
     const updateResponse = await request(app.callback()).patch('/api/fiddle/' + createResponse.body.id)
         .send({ files: [FILE2_UPDATED] });
-    expect(updateResponse.status).toBe(204);
-
-    const response = await request(app.callback()).get('/api/fiddle/' + createResponse.body.id);
-    expect(response.status).toBe(200);
-    expect(response.body.success).toBeTruthy();
-    expect(response.body.id).toBeTruthy();
-    expect(response.body.files).toEqual([FILE1, FILE2_UPDATED]);
+    expect(updateResponse.status).toBe(403);
 });
+
 
