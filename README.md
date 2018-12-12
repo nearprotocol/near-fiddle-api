@@ -21,8 +21,9 @@ createdb -O fiddle fiddle_development
 createdb -O fiddle fiddle_test
 ```
 
-## Run the service 
+## Build and run the service 
 
 ```
+npm install
 node app.js
 ```
