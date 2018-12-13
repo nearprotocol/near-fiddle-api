@@ -10,8 +10,8 @@ const cors = require('@koa/cors');
 
 // TODO: Check what limit means and set appropriate limit
 app.use(body({ limit: '500kb', fallback: true }))
-// TODO: Limit CORS to studio.nearprotocol.com
-app.use(cors());
+// TODO: Don't use CORS in production on studio.nearprotocol.com
+app.use(cors({ credentials: true }));
 
 const models = require('./models');
 const Op = models.Sequelize.Op;
