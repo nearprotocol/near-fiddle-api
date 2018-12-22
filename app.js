@@ -86,7 +86,7 @@ const grantFiddleAccess = async (ctx, next) => {
 }
 
 const checkFiddleAccess = async (ctx, next) => {
-    ctx.fiddleEditable = ctx.session.ownedFiddles && ctx.session.ownedFiddles.find(ctx.fiddle.name);
+    ctx.fiddleEditable = !!(ctx.session.ownedFiddles && ctx.session.ownedFiddles.find(ctx.fiddle.name));
     await next();
 }
 
@@ -103,6 +103,7 @@ router.get('/api/fiddle/:name', withFiddle, checkFiddleAccess, async ctx => {
     ctx.body = {
         success: true,
         message: "Success",
+        editable: ctx.fiddleEditable,
         id: ctx.fiddle.name,
         files: ctx.fiddle.FiddleFiles.map(file => {
             return {
