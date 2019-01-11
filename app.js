@@ -140,6 +140,13 @@ router.get('/app/:name/:path(.*)',  async ctx => {
 
     ctx.body = file.File.getDataValue('data').toString('utf8');
     ctx.type = path.extname(filePath);
+
+    ctx.cookies.set('fiddleConfig', encodeURIComponent(JSON.stringify({
+        contractName: `studio-${ctx.params.name}`,
+        baseUrl: "https://studio.nearprotocol.com/contract-api",
+        nodeUrl: "https://studio.nearprotocol.com/devnet"
+    })), { signed: false, httpOnly: false });
+
 });
 
 
