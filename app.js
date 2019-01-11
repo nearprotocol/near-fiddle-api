@@ -16,6 +16,7 @@ app.use(cors({ credentials: true }));
 const models = require('./models');
 const Op = models.Sequelize.Op;
 const randomstring = require('randomstring');
+const path = require('path');
 const Router = require('koa-router');
 const router = new Router();
 
@@ -121,6 +122,26 @@ router.patch('/api/fiddle/:name', withFiddle, checkFiddleAccess, updateFiddleFil
     }
     ctx.status = 204;
 });
+
+router.get('/app/:name/:path(.*)',  async ctx => {
+    let fiddle = await models.Fiddle.findOne({
+        where: { name: ctx.params.name }
+    });
+
+    let filePath = "src/" + (ctx.params.path || "main.html");
+    let file = await models.FiddleFile.findOne({
+        where: { FiddleId: fiddle.id, name: filePath },
+        include: { model: models.File }
+    });
+
+    if (!file) {
+        ctx.throw(404);
+    }
+
+    ctx.body = file.File.getDataValue('data').toString('utf8');
+    ctx.type = path.extname(filePath);
+});
+
 
 app
     .use(router.routes())
