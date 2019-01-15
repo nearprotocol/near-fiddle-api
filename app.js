@@ -9,8 +9,9 @@ const body = require('koa-json-body')
 const cors = require('@koa/cors');
 
 app.use(body({ limit: '3Mb', fallback: true }))
-// TODO: Don't use CORS in production on studio.nearprotocol.com
-app.use(cors({ credentials: true }));
+if (process.NODE_ENV != 'production') {
+    app.use(cors({ credentials: true }));
+}
 
 const models = require('./models');
 const Op = models.Sequelize.Op;
