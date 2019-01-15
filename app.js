@@ -14,7 +14,6 @@ if (process.NODE_ENV != 'production') {
 }
 
 const models = require('./models');
-const Op = models.Sequelize.Op;
 const randomstring = require('randomstring');
 const path = require('path');
 const Router = require('koa-router');
@@ -27,7 +26,7 @@ models.Sequelize.useCLS(namespace);
 const transactionMiddleware = (ctx, next) => {
     return new Promise((resolve, reject) => {
         namespace.run(() => {
-            const transaction = models.sequelize.transaction().then(transaction => {
+            models.sequelize.transaction().then(transaction => {
                 namespace.set('transaction', transaction);
                 next().then((result) => {
                     transaction.commit();

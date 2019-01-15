@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         models.FiddleFile.belongsTo(Fiddle);
     };
     Fiddle.prototype.addOrUpdateFileFromRequest = async function (fileInRequest) {
-        const [file, _] = await sequelize.models.File.findOrCreate({
+        const [file,] = await sequelize.models.File.findOrCreate({
             where: {
                 hash: await crypto2.hash.sha256(fileInRequest.data)
             },
