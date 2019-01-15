@@ -44,11 +44,11 @@ app.use(transactionMiddleware);
 
 const session = require('koa-generic-session');
 const SequelizeStore = require('koa-generic-session-sequelize');
-app.use(session({
-    store: new SequelizeStore(models.sequelize, {
-        maxAge: 90 * 24 * 60 * 60 * 1000 // 90 days in ms
-    })
-}));
+const sessionStore = new SequelizeStore(models.sequelize, {
+    maxAge: 90 * 24 * 60 * 60 * 1000 // 90 days in ms
+});
+
+app.use(session({ store: sessionStore }));
 
 const createFiddle = async (ctx, next) => {
     ctx.fiddle = await models.Fiddle.create({
@@ -75,7 +75,7 @@ const withFiddle = async (ctx, next) => {
 }
 
 const updateFiddleFiles = async (ctx, next) => {
-    const filesInRequest = ctx.request.body.files; 
+    const filesInRequest = ctx.request.body.files;
     await ctx.fiddle.addOrUpdateFilesFromRequest(filesInRequest);
     await next();
 }
@@ -160,5 +160,6 @@ if (!module.parent) {
     });
 } else {
     module.exports = app;
+    app.sessionStore = sessionStore;
 }
 
