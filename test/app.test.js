@@ -1,9 +1,11 @@
-const request = require('supertest');
+const supertest = require('supertest');
 const app = require('../app');
 const models = require('../models');
 
 beforeAll(async () => {
     await models.sequelize.sync({ force: true });
+    await app.sessionStore.Model.sync();
+    app.sessionStore.synced = true;
 });
 
 afterAll(async () => {
@@ -28,28 +30,41 @@ const FILE2_UPDATED = {
     data: 'file contents 3'
 };
 
+let request = supertest(app.callback());
+
 test('Create Fiddle No Content', async () => {
-    const response = await request(app.callback()).post('/api/fiddle');
+    const response = await request.post('/api/fiddle');
     expect(response.status).toBe(201);
     expect(response.body.success).toBeTruthy();
     expect(response.body.id).toBeTruthy();
 });
 
 test('Create & View Fiddle', async () => {
-    const createResponse = await request(app.callback()).post('/api/fiddle')
+    const createResponse = await request.post('/api/fiddle')
         .send({ files: [FILE1, FILE2] });
     expect(createResponse.status).toBe(201);
 
-    const response = await request(app.callback()).get('/api/fiddle/' + createResponse.body.id);
+    const response = await request.get('/api/fiddle/' + createResponse.body.id);
     expect(response.status).toBe(200);
     expect(response.body.success).toBeTruthy();
     expect(response.body.id).toBeTruthy();
     expect(response.body.files).toEqual([FILE1, FILE2]);
 });
 
+test('Create & View Fiddle Page', async () => {
+    const createResponse = await request.post('/api/fiddle')
+        .send({ files: [FILE1, FILE2] });
+    expect(createResponse.status).toBe(201);
+
+    const response = await request.get(`/app/${createResponse.body.id}/file1.txt`);
+    expect(response.status).toBe(200);
+    expect(response.type).toBe('text/plain');
+    expect(response.text).toEqual(FILE1.data);
+});
+
 test('Create Fiddle & Add File', async () => {
     // NOTE: request.agent creates client with cookie store
-    const agent = request.agent(app.callback());
+    const agent = supertest.agent(app.callback());
     const createResponse = await agent.post('/api/fiddle')
         .send({ files: [FILE1] });
     expect(createResponse.status).toBe(201);
@@ -67,7 +82,7 @@ test('Create Fiddle & Add File', async () => {
 
 test('Create Fiddle & Update File', async () => {
     // NOTE: request.agent creates client with cookie store
-    const agent = request.agent(app.callback());
+    const agent = supertest.agent(app.callback());
     const createResponse = await agent.post('/api/fiddle')
         .send({ files: [FILE1, FILE2] });
     expect(createResponse.status).toBe(201);
@@ -84,11 +99,11 @@ test('Create Fiddle & Update File', async () => {
 });
 
 test('Create Fiddle & Update File Unauthorized', async () => {
-    const createResponse = await request(app.callback()).post('/api/fiddle')
+    const createResponse = await request.post('/api/fiddle')
         .send({ files: [FILE1, FILE2] });
     expect(createResponse.status).toBe(201);
 
-    const updateResponse = await request(app.callback()).patch('/api/fiddle/' + createResponse.body.id)
+    const updateResponse = await request.patch('/api/fiddle/' + createResponse.body.id)
         .send({ files: [FILE2_UPDATED] });
     expect(updateResponse.status).toBe(403);
 });
