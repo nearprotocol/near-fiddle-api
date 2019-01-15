@@ -3,12 +3,12 @@ Sugar.extend();
 
 const Koa = require('koa');
 const app = new Koa();
-app.keys = [ process.env.FIDDLE_SECRET_KEY || "verysecretkey"];
+app.keys = [ process.env.FIDDLE_SECRET_KEY || 'verysecretkey'];
 
-const body = require('koa-json-body')
+const body = require('koa-json-body');
 const cors = require('@koa/cors');
 
-app.use(body({ limit: '3Mb', fallback: true }))
+app.use(body({ limit: '3Mb', fallback: true }));
 if (process.NODE_ENV != 'production') {
     app.use(cors({ credentials: true }));
 }
@@ -55,7 +55,7 @@ const createFiddle = async (ctx, next) => {
         name: randomstring.generate({ readable: true, length: 7 })
     });
     await next();
-}
+};
 
 const withFiddle = async (ctx, next) => {
     ctx.fiddle = await models.Fiddle.findOne({
@@ -72,29 +72,29 @@ const withFiddle = async (ctx, next) => {
         ctx.throw(404);
     }
     await next();
-}
+};
 
 const updateFiddleFiles = async (ctx, next) => {
     const filesInRequest = ctx.request.body.files;
     await ctx.fiddle.addOrUpdateFilesFromRequest(filesInRequest);
     await next();
-}
+};
 
 const grantFiddleAccess = async (ctx, next) => {
     ctx.session.ownedFiddles = ctx.session.ownedFiddles || [];
     ctx.session.ownedFiddles = ctx.session.ownedFiddles.concat([ctx.fiddle.name]);
     await next();
-}
+};
 
 const checkFiddleAccess = async (ctx, next) => {
     ctx.fiddleEditable = !!(ctx.session.ownedFiddles && ctx.session.ownedFiddles.find(ctx.fiddle.name));
     await next();
-}
+};
 
 router.post('/api/fiddle', createFiddle, updateFiddleFiles, grantFiddleAccess, async ctx => {
     ctx.body = {
         success: true,
-        message: "Branch " + ctx.fiddle.name + " pushed",
+        message: 'Branch ' + ctx.fiddle.name + ' pushed',
         id: ctx.fiddle.name
     };
     ctx.status = 201;
@@ -103,7 +103,7 @@ router.post('/api/fiddle', createFiddle, updateFiddleFiles, grantFiddleAccess, a
 router.get('/api/fiddle/:name', withFiddle, checkFiddleAccess, async ctx => {
     ctx.body = {
         success: true,
-        message: "Success",
+        message: 'Success',
         editable: ctx.fiddleEditable,
         id: ctx.fiddle.name,
         files: ctx.fiddle.FiddleFiles.map(file => {
@@ -128,7 +128,7 @@ router.get('/app/:name/:path(.*)',  async ctx => {
         where: { name: ctx.params.name }
     });
 
-    let filePath = "src/" + (ctx.params.path || "main.html");
+    let filePath = 'src/' + (ctx.params.path || 'main.html');
     let file = await models.FiddleFile.findOne({
         where: { FiddleId: fiddle.id, name: filePath },
         include: { model: models.File }
@@ -143,8 +143,8 @@ router.get('/app/:name/:path(.*)',  async ctx => {
 
     ctx.cookies.set('fiddleConfig', encodeURIComponent(JSON.stringify({
         contractName: `studio-${ctx.params.name}`,
-        baseUrl: "https://studio.nearprotocol.com/contract-api",
-        nodeUrl: "https://studio.nearprotocol.com/devnet"
+        baseUrl: 'https://studio.nearprotocol.com/contract-api',
+        nodeUrl: 'https://studio.nearprotocol.com/devnet'
     })), { signed: false, httpOnly: false });
 
 });

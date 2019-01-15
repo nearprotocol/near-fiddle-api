@@ -4,7 +4,9 @@
   "description": "Micro-service to save/load fiddles for NEAR Studio",
   "main": "index.js",
   "scripts": {
-    "test": "jest test"
+    "test": "jest test",
+    "lint": "eslint .",
+    "fix": "eslint . --fix"
   },
   "author": "",
   "license": "MIT",
@@ -25,6 +27,7 @@
     "sugar": "^2.0.4"
   },
   "devDependencies": {
+    "eslint": "^5.12.0",
     "jest": "^23.6.0",
     "supertest": "^3.3.0"
   }
