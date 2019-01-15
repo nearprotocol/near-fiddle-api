@@ -1,5 +1,13 @@
 image: node:latest
 
+services:
+  - postgres:latest
+
+variables:
+  POSTGRES_DB: fiddle_test
+  POSTGRES_USER: fiddle
+  POSTGRES_PASSWORD: fiddle
+
 stages:
   - build
   - test
