@@ -8,8 +8,7 @@ app.keys = [ process.env.FIDDLE_SECRET_KEY || "verysecretkey"];
 const body = require('koa-json-body')
 const cors = require('@koa/cors');
 
-// TODO: Check what limit means and set appropriate limit
-app.use(body({ limit: '500kb', fallback: true }))
+app.use(body({ limit: '3Mb', fallback: true }))
 // TODO: Don't use CORS in production on studio.nearprotocol.com
 app.use(cors({ credentials: true }));
 
