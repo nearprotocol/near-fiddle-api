@@ -1,0 +1,30 @@
+image: node:latest
+
+services:
+  - postgres:latest
+
+variables:
+  POSTGRES_DB: fiddle_test
+  POSTGRES_USER: fiddle
+  POSTGRES_PASSWORD: fiddle
+  NODE_ENV: ci
+
+stages:
+  - build
+  - test
+
+cache:
+  paths:
+    - node_modules/
+
+install_dependencies:
+  stage: build
+  script:
+    - npm install
+  artifacts:
+    paths:
+      - node_modules/
+
+test_with_lab:
+  stage: test
+  script: npm test

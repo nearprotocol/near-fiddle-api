@@ -13,6 +13,13 @@
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
+  "ci": {
+    "username": "fiddle",
+    "password": "fiddle",
+    "database": "fiddle_test",
+    "host": "postgres",
+    "dialect": "postgres"
+  },
   "production": {
     "username": "fiddle",
     "password": "fiddle",
