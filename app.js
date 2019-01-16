@@ -51,7 +51,7 @@ app.use(session({ store: sessionStore }));
 
 const createFiddle = async (ctx, next) => {
     ctx.fiddle = await models.Fiddle.create({
-        name: randomstring.generate({ readable: true, length: 7 })
+        name: randomstring.generate({ readable: true, length: 9 , capitalization: 'lowercase' })
     });
     await next();
 };

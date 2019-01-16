@@ -37,6 +37,7 @@ test('Create Fiddle No Content', async () => {
     expect(response.status).toBe(201);
     expect(response.body.success).toBeTruthy();
     expect(response.body.id).toBeTruthy();
+    expect(response.body.id).toBe(response.body.id.toLowerCase());
 });
 
 test('Create & View Fiddle', async () => {
