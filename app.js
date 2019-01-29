@@ -141,7 +141,7 @@ router.get('/app/:name/:path(.*)',  async ctx => {
     ctx.type = path.extname(filePath);
 
     ctx.cookies.set('fiddleConfig', encodeURIComponent(JSON.stringify({
-        contractName: `studio-${ctx.params.name}`,
+        contractName: ctx.query.contractName || `studio-${ctx.params.name}`,
         baseUrl: 'https://studio.nearprotocol.com/contract-api',
         nodeUrl: 'https://studio.nearprotocol.com/devnet'
     })), { signed: false, httpOnly: false });
