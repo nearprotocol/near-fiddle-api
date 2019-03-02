@@ -142,6 +142,7 @@ router.get('/app/:name/:path(.*)',  async ctx => {
 
     ctx.cookies.set('fiddleConfig', encodeURIComponent(JSON.stringify({
         contractName: ctx.query.contractName || `studio-${ctx.params.name}`,
+        appUrl: `${process.env.APP_URL || 'https://app.near.ai'}/${ctx.params.name}`,
         baseUrl: process.env.CONTRACT_HELPER_URL || 'https://studio.nearprotocol.com/contract-api',
         nodeUrl: process.env.NODE_ENV_URL || 'https://studio.nearprotocol.com/devnet',
         walletUrl: process.env.WALLET_URL || 'https://wallet.nearprotocol.com'
