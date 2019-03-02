@@ -142,8 +142,9 @@ router.get('/app/:name/:path(.*)',  async ctx => {
 
     ctx.cookies.set('fiddleConfig', encodeURIComponent(JSON.stringify({
         contractName: ctx.query.contractName || `studio-${ctx.params.name}`,
-        baseUrl: 'https://studio.nearprotocol.com/contract-api',
-        nodeUrl: 'https://studio.nearprotocol.com/devnet'
+        baseUrl: process.env.CONTRACT_HELPER_URL || 'https://studio.nearprotocol.com/contract-api',
+        nodeUrl: process.env.NODE_ENV_URL || 'https://studio.nearprotocol.com/devnet',
+        walletUrl: process.env.WALLET_URL || 'https://wallet.nearprotocol.com'
     })), { signed: false, httpOnly: false });
 
 });
