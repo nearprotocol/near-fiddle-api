@@ -127,14 +127,24 @@ router.get('/app/:name/:path(.*)',  async ctx => {
         where: { name: ctx.params.name }
     });
 
-    let filePath = 'src/' + (ctx.params.path || 'main.html');
-    let file = await models.FiddleFile.findOne({
+    const loadFile = filePath => models.FiddleFile.findOne({
         where: { FiddleId: fiddle.id, name: filePath },
         include: { model: models.File }
     });
 
+    let filePath = `src/${ctx.params.path || 'index.html'}`;
+    let file = await loadFile(filePath);
     if (!file) {
-        ctx.throw(404);
+        // Needed for old fiddles
+        // TODO: Remove at prod launch
+        if (!ctx.params.path) {
+            filePath = 'src/main.html';
+            file = await loadFile(filePath);
+        }
+
+        if (!file) {
+            ctx.throw(404);
+        }
     }
 
     ctx.body = file.File.getDataValue('data').toString('utf8');
@@ -147,7 +157,6 @@ router.get('/app/:name/:path(.*)',  async ctx => {
         nodeUrl: process.env.NODE_ENV_URL || 'https://studio.nearprotocol.com/devnet',
         walletUrl: process.env.WALLET_URL || 'https://wallet.nearprotocol.com'
     })), { signed: false, httpOnly: false });
-
 });
 
 

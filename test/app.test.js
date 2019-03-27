@@ -30,6 +30,12 @@ const FILE2_UPDATED = {
     data: 'file contents 3'
 };
 
+const FILE_INDEX = {
+    name: 'src/index.html',
+    type: 'text',
+    data: 'index contents'
+};
+
 let request = supertest(app.callback());
 
 test('Create Fiddle No Content', async () => {
@@ -61,6 +67,17 @@ test('Create & View Fiddle Page', async () => {
     expect(response.status).toBe(200);
     expect(response.type).toBe('text/plain');
     expect(response.text).toEqual(FILE1.data);
+});
+
+test('Create & View Fiddle Page Index', async () => {
+    const createResponse = await request.post('/api/fiddle')
+        .send({ files: [FILE1, FILE2, FILE_INDEX] });
+    expect(createResponse.status).toBe(201);
+
+    const response = await request.get(`/app/${createResponse.body.id}/`);
+    expect(response.status).toBe(200);
+    expect(response.type).toBe('text/html');
+    expect(response.text).toEqual(FILE_INDEX.data);
 });
 
 test('Create Fiddle & Add File', async () => {
