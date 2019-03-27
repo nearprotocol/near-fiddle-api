@@ -74,7 +74,7 @@ test('Create & View Fiddle Page Index', async () => {
         .send({ files: [FILE1, FILE2, FILE_INDEX] });
     expect(createResponse.status).toBe(201);
 
-    const response = await request.get(`/app/${createResponse.body.id}/`);
+    const response = await request.get(`/app/${createResponse.body.id}`);
     expect(response.status).toBe(200);
     expect(response.type).toBe('text/html');
     expect(response.text).toEqual(FILE_INDEX.data);

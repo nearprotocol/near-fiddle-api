@@ -122,7 +122,7 @@ router.patch('/api/fiddle/:name', withFiddle, checkFiddleAccess, updateFiddleFil
     ctx.status = 204;
 });
 
-router.get('/app/:name/:path(.*)',  async ctx => {
+const servePage = async ctx => {
     let fiddle = await models.Fiddle.findOne({
         where: { name: ctx.params.name }
     });
@@ -157,7 +157,10 @@ router.get('/app/:name/:path(.*)',  async ctx => {
         nodeUrl: process.env.NODE_ENV_URL || 'https://studio.nearprotocol.com/devnet',
         walletUrl: process.env.WALLET_URL || 'https://wallet.nearprotocol.com'
     })), { signed: false, httpOnly: false });
-});
+};
+
+router.get('/app/:name', servePage);
+router.get('/app/:name/:path(.*)', servePage);
 
 
 app
