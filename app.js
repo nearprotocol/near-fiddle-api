@@ -151,6 +151,7 @@ const servePage = async ctx => {
     ctx.type = path.extname(filePath);
 
     ctx.cookies.set('fiddleConfig', encodeURIComponent(JSON.stringify({
+        nearPages: true,
         contractName: ctx.query.contractName || `studio-${ctx.params.name}`,
         appUrl: `${process.env.APP_URL || 'https://app.near.ai'}/${ctx.params.name}`,
         baseUrl: process.env.CONTRACT_HELPER_URL || 'https://studio.nearprotocol.com/contract-api',
