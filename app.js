@@ -170,7 +170,7 @@ app
 
 if (!module.parent) {
     models.sequelize.sync().then(() => {
-        app.listen(3000);
+        app.listen(process.env.NEAR_FIDDLE_PORT || 3000);
     });
 } else {
     module.exports = app;
