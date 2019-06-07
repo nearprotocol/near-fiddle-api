@@ -32,3 +32,15 @@ test_with_lab:
 lint:
   stage: test
   script: npm run lint
+
+docker_build:
+  stage: build
+  image: docker.latest
+  services:
+    - docker:dind
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+    - docker build --pull -t registry.gitlab.com/nearprotocol/near-fiddle-api:$CI_COMMIT_TAG .
+    - docker push registry.gitlab.com/nearprotocol/near-fiddle-api:$CI_COMMIT_TAG
+  only:
+    - tags
