@@ -7,7 +7,6 @@ RUN echo 'deb https://dl.yarnpkg.com/debian/ stable main' | tee /etc/apt/sources
 RUN apt-get update -qq && apt-get install -y \
     jq \
     nodejs \
-    # fiddle
     postgresql \
     nginx
 
