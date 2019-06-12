@@ -2,28 +2,28 @@
   "development": {
     "username": "fiddle",
     "password": "fiddle",
-    "database": "fiddle_development",
+    "database": "fiddle",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
     "username": "fiddle",
     "password": "fiddle",
-    "database": "fiddle_test",
+    "database": "fiddle",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "ci": {
     "username": "fiddle",
     "password": "fiddle",
-    "database": "fiddle_test",
+    "database": "fiddle",
     "host": "postgres",
     "dialect": "postgres"
   },
   "production": {
     "username": "fiddle",
     "password": "fiddle",
-    "database": "fiddle_production",
+    "database": "fiddle",
     "host": "127.0.0.1",
     "dialect": "postgres"
   }
