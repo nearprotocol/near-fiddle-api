@@ -8,6 +8,10 @@ This micro-service depends on the following environment variables:
 * `CONTRACT_HELPER_URL` -- default `https://studio.nearprotocol.com/contract-api`;
 * `NODE_URL` -- default `https://studio.nearprotocol.com/devnet`;
 * `WALLET_URL` -- default `https://wallet.nearprotocol.com`;
+
+The above variables define the URLs used by the web apps from withing the browser so they should always correspond to
+public IP or DNS name.
+
 * `NODE_ENV` -- default `production`;
 
 The port that the service is listening on is 3000.
