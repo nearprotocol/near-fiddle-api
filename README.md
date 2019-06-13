@@ -13,8 +13,7 @@ The above variables define the URLs used by the web apps from withing the browse
 public IP or DNS name.
 
 * `NODE_ENV` -- default `production`;
-
-The port that the service is listening on is 3000.
+* `PORT` -- default `3000`;
 
 ## Local Development
 ### Requirements 
@@ -32,6 +31,7 @@ brew install postgres
 brew services start postgresql
 createuser fiddle -W  # It'll ask for password, enter "fiddle"
 createdb -O fiddle fiddle
+createdb -O fiddle fiddle_test
 ```
 
 ### Build and run the service 
