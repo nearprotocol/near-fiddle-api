@@ -2,7 +2,7 @@
   "development": {
     "username": "fiddle",
     "password": "fiddle",
-    "database": "fiddle_development",
+    "database": "fiddle",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
@@ -23,7 +23,7 @@
   "production": {
     "username": "fiddle",
     "password": "fiddle",
-    "database": "fiddle_production",
+    "database": "fiddle",
     "host": "127.0.0.1",
     "dialect": "postgres"
   }

@@ -155,7 +155,7 @@ const servePage = async ctx => {
         contractName: ctx.query.contractName || `studio-${ctx.params.name}`,
         appUrl: `${process.env.APP_URL || 'https://app.near.ai'}/${ctx.params.name}`,
         baseUrl: process.env.CONTRACT_HELPER_URL || 'https://studio.nearprotocol.com/contract-api',
-        nodeUrl: process.env.NODE_ENV_URL || 'https://studio.nearprotocol.com/devnet',
+        nodeUrl: process.env.NODE_URL || 'https://studio.nearprotocol.com/devnet',
         walletUrl: process.env.WALLET_URL || 'https://wallet.nearprotocol.com'
     })), { signed: false, httpOnly: false });
 };
@@ -170,7 +170,7 @@ app
 
 if (!module.parent) {
     models.sequelize.sync().then(() => {
-        app.listen(process.env.NEAR_FIDDLE_PORT || 3000);
+        app.listen(process.env.PORT || 3000);
     });
 } else {
     module.exports = app;
