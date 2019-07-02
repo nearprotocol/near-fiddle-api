@@ -4,6 +4,7 @@
   "description": "Micro-service to save/load fiddles for NEAR Studio",
   "main": "index.js",
   "scripts": {
+    "start": "supervisor app",
     "test": "jest test",
     "lint": "eslint .",
     "fix": "eslint . --fix"
