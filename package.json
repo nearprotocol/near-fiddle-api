@@ -25,7 +25,8 @@
     "pg-hstore": "^2.3.2",
     "randomstring": "^1.1.5",
     "sequelize": "^4.41.2",
-    "sugar": "^2.0.4"
+    "sugar": "^2.0.4",
+    "supervisor": "^0.12.0"
   },
   "devDependencies": {
     "eslint": "^5.12.0",
