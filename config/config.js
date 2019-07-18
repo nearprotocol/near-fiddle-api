@@ -27,4 +27,4 @@ module.exports = {
         host: process.env.FIDDLE_DB_HOST || '127.0.0.1',
         dialect: 'postgres',
     },
-}
+};
