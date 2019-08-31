@@ -135,16 +135,7 @@ const servePage = async ctx => {
     let filePath = `src/${ctx.params.path || 'index.html'}`;
     let file = await loadFile(filePath);
     if (!file) {
-        // Needed for old fiddles
-        // TODO: Remove at prod launch
-        if (!ctx.params.path) {
-            filePath = 'src/main.html';
-            file = await loadFile(filePath);
-        }
-
-        if (!file) {
-            ctx.throw(404);
-        }
+        ctx.throw(404);
     }
 
     ctx.body = file.File.getDataValue('data').toString('utf8');
