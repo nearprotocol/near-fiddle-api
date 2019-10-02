@@ -1,5 +1,7 @@
 # near-fiddle-api
 
+ ![Build Status](https://gitlab.com/near-protocol/near-fiddle-api/badges/staging/pipeline.svg)
+
 Micro-service to save/load fiddles for [NEAR Studio](https://github.com/NEARProtocol/NEARStudio).
 
 ## Environment Variables
