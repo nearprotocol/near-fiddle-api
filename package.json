@@ -22,7 +22,7 @@
     "koa-router": "^7.4.0",
     "koa-session": "^5.10.0",
     "pg": "^7.12.1",
-    "pg-hstore": "^2.3.2",
+    "pg-hstore": "^2.3.3",
     "randomstring": "^1.1.5",
     "sequelize": "^4.41.2",
     "sugar": "^2.0.6",
