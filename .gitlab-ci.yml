@@ -10,25 +10,13 @@ variables:
   NODE_ENV: ci
 
 stages:
-  - build
   - test
 
-cache:
-  paths:
-    - node_modules/
-
-install_dependencies:
-  stage: build
-  script:
-    - npm install
-  artifacts:
-    paths:
-      - node_modules/
 
 test_with_lab:
   stage: test
-  script: npm test
+  script: yarn && yarn test
 
 lint:
   stage: test
-  script: npm run lint
+  script: yarn && yarn lint
