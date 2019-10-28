@@ -15,7 +15,7 @@
     "@koa/cors": "^3.0.0",
     "cls-hooked": "^4.2.2",
     "crypto2": "^2.0.0",
-    "koa": "^2.6.2",
+    "koa": "^2.11.0",
     "koa-generic-session": "^2.0.1",
     "koa-generic-session-sequelize": "^2.2.0",
     "koa-json-body": "^5.3.0",
