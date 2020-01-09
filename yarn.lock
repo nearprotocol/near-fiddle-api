@@ -2699,10 +2699,10 @@ koa-generic-session-sequelize@^2.2.0:
   resolved "https://registry.yarnpkg.com/koa-generic-session-sequelize/-/koa-generic-session-sequelize-2.2.0.tgz#84b29c6ef9da38758d49cc6bd13beb3f7e1d5ae1"
   integrity sha512-GwvVprRKsj3R4EMChxRHwlAdiw92GR1FLfB3zinUb+B1OBY12G9VVOl82btAfINMy3Su+vjbpXifKt2pr/hu7A==
 
-koa-generic-session@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/koa-generic-session/-/koa-generic-session-2.0.3.tgz#0d5b096a000acefb43b683a022fcb111e965e089"
-  integrity sha512-b9zotWz40Fs5yRoGKu9TGzq3moCMBrISaygVaipzi3ETRyjeU4pwnSnoGWYSwIir3bDeoYBfQd9Q6iK2a4cEzg==
+koa-generic-session@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/koa-generic-session/-/koa-generic-session-2.0.4.tgz#e212395d344a52c24ce2567f04dbd30c32dc0aa2"
+  integrity sha512-1y17Xxwr0J3L7Icxm94KwfFBJwrnGbXKgENz4mzPQZ4AGP9Wmli/SuqJJ2jg3EUd9h11wNp7D144/+3A4Om2uw==
   dependencies:
     copy-to "~2.0.1"
     crc "~3.5.0"
